@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    아이디 : <input type="text" id="uiId">
+    비밀번호 : <input type="text" id="uiPwd">
+    <button onclick="login()">로그인</button>
+    <script>
+        async function login() {
+            const userInfo = {
+                uiId: document.querySelector('#uiId').value,
+                uiPwd: document.querySelector('#uiPwd').value
+            }
+            const res = await fetch('http://localhost/login', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify(userInfo)
+            });
+            const result = await res.text();
+            if(result) {
+                console.log(result);
+                const user = JSON.parse(result)
+                console.log(user);
+                localStorage.setItem('token', user.token);
+                alert(result);
+            } else {
+                alert('아이디나 비번 틀림 ㅋㅋ');
+            }
+        }
+    </script>
+</body>
+</html>

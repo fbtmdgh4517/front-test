@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>아이디</th>
+        </tr>
+        <tbody id="tBody"></tbody>
+    </table>
+    <script>
+        window.addEventListener('load', function() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost/user-infos');
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === xhr.DONE) {
+                    if(xhr.status === 200) {
+                        const userInfos = JSON.parse(xhr.responseText);
+                        let html = '';
+                        for(const userInfo of userInfos) {
+                            html += '<tr>';
+                            html += `<td>${userInfo.uiNum}</td>`;
+                            html += `<td>${userInfo.uiName}</td>`;
+                            html += `<td><a href='/user-info.html?uiNum=${userInfo.uiNum}'>${userInfo.uiId}</a></td>`;
+                            html += '</tr>';
+                        }
+                        document.querySelector('#tBody').innerHTML = html;
+                    }
+                }
+            }
+            xhr.send();
+        })
+    </script>
+</body>
+</html>

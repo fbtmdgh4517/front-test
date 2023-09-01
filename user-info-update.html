@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    이름 : <input type="text" id="uiName">
+    비밀번호 : <input type="text" id="uiPwd">
+    <button onclick="updateUser()">수정</button>
+    <script>
+        const url = new URL(location.href);
+        const uiNum = url.searchParams.get('uiNum');
+
+        async function updateUser() {
+            const res = await fetch('http://localhost/user-infos', {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({
+                    uiNum: uiNum,
+                    uiName: document.querySelector('#uiName').value,
+                    uiPwd: document.querySelector('#uiPwd').value
+                })
+            });
+            const result = await res.text();
+            if(result === '1') {
+                alert('수정 완료');
+                location.href = '/user-infos.html';
+            }
+        }
+
+        window.addEventListener('load', async function() {
+            const res = await fetch(`http://localhost/user-infos/${uiNum}`, {
+                method: 'GET'
+            })
+            const userInfo = await res.json();
+            for(const key in userInfo) {
+                if(document.querySelector(`#${key}`)) {
+                    document.querySelector(`#${key}`).value = userInfo[key];
+                }
+            }
+        });
+    </script>
+</body>
+</html>

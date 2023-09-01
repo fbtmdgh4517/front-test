@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="1" id="table">
+        <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>나이</th>
+        </tr>
+    </table>
+    <script>
+        window.addEventListener('load', function() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost/api/users');
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === xhr.DONE) {
+                    if(xhr.status === 200) {
+                        const obj = JSON.parse(xhr.responseText);
+                        let html = '';
+                        for(let i=0; i<obj.length; i++) {
+                            html += '<tr>';
+                            html += `<td data-click="${i}">${obj[i].num}</td>`;
+                            html += `<td>${obj[i].name}</td>`;
+                            html += `<td>${obj[i].age}</td>`;
+                            html += '</tr>';
+                        }
+                        document.querySelector('#table').innerHTML += html;
+                        const tds = document.querySelectorAll('td[data-click]');
+                        for(const td of tds) {
+                            td.onclick = function() {
+                                alert(this.innerText);
+                            }
+                        }
+                    }
+                }
+            }
+            xhr.send();
+        })
+    </script>
+</body>
+</html>
